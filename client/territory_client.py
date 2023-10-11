@@ -7,33 +7,25 @@ def initiate_territory():
     url = f'{base_url}/territory/initiate'
     response = requests.post(url)
     if response.status_code == 200:
-        print(response.json())
-        status = "Territory successfully created!"
+        print(response.text)
     else:
         print('Error:', response.status_code)
-        status = "An error occur while loading the file."
-    return status
+    return response.text
 
 def delete_territory():
     url = f'{base_url}/territory/remove'
     response = requests.post(url)
     if response.status_code == 200:
-        print(response.json())
-        status = "Territory successfully deleted!"
+        print(response.text)
     else:
         print('Error:', response.status_code)
-        status = "An error occur while deleting the territory."
-    return status
+    return response.text
 
 def reset_territory():
     url = f'{base_url}/territory/reset'
     response = requests.post(url)
     if response.status_code == 200:
-        print(response.json())
-        status = "Territory successfully reset!"
+        print(response.text)
     else:
         print('Error:', response.status_code)
-        status = "An error occur while resetting the file."
-    return status
-
-reset_territory()
+    return response.text
