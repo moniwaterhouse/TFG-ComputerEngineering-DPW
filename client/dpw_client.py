@@ -3,8 +3,8 @@ from client.config import Config
 
 base_url = Config.BASE_URL
 
-def deposit_pheromone(x_pos, y_pos):
-    url = f'{base_url}/dpw/deposit-pheromone/{x_pos}/{y_pos}'
+def deposit_pheromone(x_pos, y_pos, pheromone_intensity):
+    url = f'{base_url}/dpw/deposit-pheromone/{x_pos}/{y_pos}/{pheromone_intensity}'
     response = requests.post(url)
     if response.status_code == 200:
         print(response.text)
