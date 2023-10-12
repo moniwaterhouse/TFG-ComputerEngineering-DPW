@@ -44,9 +44,9 @@ class Drone:
         move_direction = sorted_options[0][0]
     print("Move direction: " + move_direction)
     print("---------------------------------")
-    coordinates = self.change_cell(move_direction)
+    coordinate = self.change_cell(move_direction)
     deposit_pheromone(self.pos_x, self.pos_y, self.pheromone_intensity)
-    return coordinates
+    return coordinate
 
   def change_direction(self, direction):
     cardinal_points = ["north", "south", "east", "west"]
@@ -74,17 +74,17 @@ class Drone:
 
   def get_move_options(self):
 
-    self.check_neighbors_state(self)
+    self.check_neighbors_state()
     move_options = []
 
-    if self.northValue == 0:
-      move_options.append(("north", self.northPheromone))
-    if self.southValue == 0:
-      move_options.append(("south", self.southPheromone))
-    if self.eastValue == 0:
-      move_options.append(("east", self.eastPheromone))
-    if self.westValue == 0:
-      move_options.append(("west", self.westPheromone))
+    if self.north_value == 0:
+      move_options.append(("north", self.north_pheromone))
+    if self.south_value == 0:
+      move_options.append(("south", self.south_pheromone))
+    if self.east_value == 0:
+      move_options.append(("east", self.east_pheromone))
+    if self.west_value == 0:
+      move_options.append(("west", self.west_pheromone))
   
     return move_options
 

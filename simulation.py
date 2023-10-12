@@ -3,7 +3,8 @@ import time
 from client.config import Config
 from Territory.territory import Territory
 from Drone.drone import Drone
-from client.dpw_client import check_if_visited, check_current_type, evaporate_pheromones, deposit_pheromone, check_east_neighbor, check_east_pheromone, check_north_neighbor, check_north_pheromone, check_south_neighbor, check_south_pheromone, check_west_neighbor, check_west_pheromone, check_current_pheromone
+from client.dpw_client import check_if_visited, check_current_type, evaporate_pheromones, check_current_pheromone, deposit_pheromone
+from client.territory_client import initiate_territory, reset_territory, delete_territory
 
 
 WIDTH, HEIGHT = 600, 600
@@ -20,11 +21,11 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Directional Pheromone Walk Simulation")
 
 
-def draw_territory(territory, width, length):
+def draw_territory(width, length):
     for i in range(0, length):
         for j in range(0, width):
-            pheromone_intensity = check_current_pheromone(i,j)
-            cell_type = check_current_type(i,j)
+            pheromone_intensity = check_current_pheromone(j,i)
+            cell_type = check_current_type(j,i)
             if cell_type == 1:
                 pygame.draw.rect(WIN, OBSTACLE_COLOR, pygame.Rect(j*CELL_SIZE,i*CELL_SIZE,CELL_SIZE, CELL_SIZE),0)
             else:
@@ -37,7 +38,7 @@ def draw_territory(territory, width, length):
                 elif pheromone_intensity in range (1, 11):
                     pheromoneColor = (66 + (10 - pheromone_intensity), 229, 229)
                 else:
-                    is_visited = check_if_visited(i,j)
+                    is_visited = check_if_visited(j,i)
                     if(is_visited == "F"):
                         pheromoneColor = WHITE
                     else:
@@ -46,21 +47,26 @@ def draw_territory(territory, width, length):
 
 
 def draw_drone(pos_x, pos_y):
-    pygame.draw.rect(WIN, DRONE_COLOR, pygame.Rect(pos_x*CELL_SIZE,pos_y*CELL_SIZE,CELL_SIZE, CELL_SIZE),0)
-
+    # Draw a circle
+    circle_center_x = pos_x * CELL_SIZE + CELL_SIZE // 2
+    circle_center_y = pos_y * CELL_SIZE + CELL_SIZE // 2
+    circle_radius = CELL_SIZE // 4
+    pygame.draw.circle(WIN, DRONE_COLOR, (circle_center_x, circle_center_y), circle_radius, 0)
 
 def main():
     run = True
     clock = pygame.time.Clock()
+    initiate_territory("/Users/moniwaterhouse/TFG-ComputerEngineering-API/TerritoryFiles/territory.txt")
 
     new_territory = Territory(TERRITORY_PATH)
-    territory = new_territory.matrix
     territory_width = new_territory.num_cols
     territory_length = new_territory.num_rows
-
+    initial_coordinate = (0,0,Config.TARGET_ALT, 0)
+    coordinates = []
+    coordinates.append(initial_coordinate)
     drones = []
 
-    '''for i in range(1, DRONE_NUMBER + 1):
+    for i in range(1, DRONE_NUMBER + 1):
         if i%4 == 0:
             drone = Drone("north",0,0,PHEROMONE_INTENSITY)
         elif i%3 == 0:
@@ -69,22 +75,22 @@ def main():
             drone = Drone("east",0,0,PHEROMONE_INTENSITY)
         else:
             drone = Drone("west",0,0,PHEROMONE_INTENSITY)
-        drones.append(drone)'''
-
-    drone = Drone("south",0,0,PHEROMONE_INTENSITY)
-    drones.append(drone)
+        drones.append(drone)
 
     missingCells = True
     counter = 0
-    territory = drone.depositPheromone(territory)
+    for drone in drones:
+        deposit_pheromone(drone.pos_x, drone.pos_y, Config.PHEROMONE_INTENSITY)
+    
+
 
     while run:
         clock.tick(200)
         WIN.fill((255,255,255))
         
-        draw_territory(territory, territory_width, territory_length)
+        draw_territory(territory_width, territory_length)
         for drone in drones:
-            draw_drone(drone.positionX, drone.positionY)
+            draw_drone(drone.pos_x, drone.pos_y)
         pygame.display.update()
 
         for event in pygame.event.get():
@@ -93,20 +99,22 @@ def main():
         
         if missingCells:
             counter = counter + 1
-            missingCells = False
             for drone in drones:
-                drone.move(territory)
-                territory = drone.depositPheromone(territory)
-            for row in territory:
-                for cell in row:
-                    cell.evaporatePheromone()
-                    if cell.visited == "F":
-                        missingCells = True
+                coordinate = drone.move()
+            
         else:
             print("Iterations: ", counter)
+            print("Coordinates: ")
+            for coord in coordinates:
+                print(coord)
+
+        evaporate_pheromones()
+        coordinates.append(coordinate)
         
         time.sleep(2.0)
     
     pygame.quit()
+    reset_territory()
+
 
 main()

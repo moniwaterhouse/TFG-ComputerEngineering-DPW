@@ -126,7 +126,7 @@ def check_if_visited(x_pos, y_pos):
     response = requests.get(url)
 
     if response.status_code == 200:
-        print("Current pheromone intensity: ", response.json()[0])
+        print("The current cell has been visited?: ", response.json()[0])
     else:
         print('Error:', response.status_code)
     return response.json()[0]
