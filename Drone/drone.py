@@ -28,20 +28,29 @@ class Drone:
       move_direction = sorted_options[0][0]
     elif options_number == 2:
       if sorted_options[0][1] == sorted_options[1][1]:
-        position = random.randint(0, 1)
-        move_direction = sorted_options[position][0]
+        move_direction = random.choice([sorted_options[0][0], sorted_options[1][0]])
       else:
         move_direction = sorted_options[0][0]
     elif options_number == 3:
-      if sorted_options[0][1] == sorted_options[1][1]:
-        if sorted_options[0][1] == sorted_options[2][1]:
-          position = random.randint(0, 2)
-          move_direction = sorted_options[position][0]
-        else:
-          position = random.randint(0, 1)
-          move_direction = sorted_options[position][0]
+      if sorted_options[0][1] == sorted_options[1][1] == sorted_options[2][1]:
+        move_direction = random.choice([sorted_options[0][0], sorted_options[1][0], sorted_options[2][0]])
+      elif sorted_options[0][1] == sorted_options[1][1]:
+        move_direction = random.choice([sorted_options[0][0], sorted_options[1][0]])
       else:
         move_direction = sorted_options[0][0]
+    else:
+      if sorted_options[0][1] == sorted_options[1][1] == sorted_options[2][1] == sorted_options[3][1]:
+        move_direction = random.choice([sorted_options[0][0], sorted_options[1][0], sorted_options[2][0, sorted_options[3][1]]])
+      elif sorted_options[0][1] == sorted_options[1][1] == sorted_options[2][1]:
+        move_direction = random.choice([sorted_options[0][0], sorted_options[1][0], sorted_options[2][0]])
+      elif sorted_options[0][1] == sorted_options[1][1]:
+        move_direction = random.choice([sorted_options[0][0], sorted_options[1][0]])
+      else:
+        move_direction = sorted_options[0][0]
+
+
+      
+
     print("Move direction: " + move_direction)
     print("---------------------------------")
     coordinate = self.change_cell(move_direction)

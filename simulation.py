@@ -4,7 +4,7 @@ from client.config import Config
 from Territory.territory import Territory
 from Drone.drone import Drone
 from client.dpw_client import check_if_visited, check_current_type, evaporate_pheromones, check_current_pheromone, deposit_pheromone
-from client.territory_client import initiate_territory, reset_territory, delete_territory
+from client.territory_client import initiate_territory, delete_territory, check_exploration
 
 
 WIDTH, HEIGHT = 600, 600
@@ -54,9 +54,10 @@ def draw_drone(pos_x, pos_y):
     pygame.draw.circle(WIN, DRONE_COLOR, (circle_center_x, circle_center_y), circle_radius, 0)
 
 def main():
+    delete_territory()
+    initiate_territory("/Users/moniwaterhouse/TFG-ComputerEngineering-DPW/Territory/territory.txt")
     run = True
     clock = pygame.time.Clock()
-    initiate_territory("/Users/moniwaterhouse/TFG-ComputerEngineering-API/TerritoryFiles/territory.txt")
 
     new_territory = Territory(TERRITORY_PATH)
     territory_width = new_territory.num_cols
@@ -78,6 +79,7 @@ def main():
         drones.append(drone)
 
     missingCells = True
+    print_statistics = False
     counter = 0
     for drone in drones:
         deposit_pheromone(drone.pos_x, drone.pos_y, Config.PHEROMONE_INTENSITY)
@@ -87,34 +89,48 @@ def main():
     while run:
         clock.tick(200)
         WIN.fill((255,255,255))
-        
-        draw_territory(territory_width, territory_length)
-        for drone in drones:
-            draw_drone(drone.pos_x, drone.pos_y)
-        pygame.display.update()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
         
         if missingCells:
+            draw_territory(territory_width, territory_length)
+            for drone in drones:
+                draw_drone(drone.pos_x, drone.pos_y)
+            pygame.display.update()
             counter = counter + 1
             for drone in drones:
                 coordinate = drone.move()
-            
-        else:
+            evaporate_pheromones()
+            missingCells = check_exploration()
+            if not missingCells:
+                print_statistics = True
+            coordinates.append(coordinate)
+        
+        elif print_statistics:
+            draw_territory(territory_width, territory_length)
+            for drone in drones:
+                draw_drone(drone.pos_x, drone.pos_y)
+            pygame.display.update()
+            counter = counter + 1
+            for drone in drones:
+                coordinate = drone.move()
+            evaporate_pheromones()
             print("Iterations: ", counter)
             print("Coordinates: ")
             for coord in coordinates:
                 print(coord)
-
-        evaporate_pheromones()
-        coordinates.append(coordinate)
+            print_statistics = False
+            
+        else:
+            time.sleep(5.0)
         
-        time.sleep(2.0)
+        
+        time.sleep(1.0)
     
     pygame.quit()
-    reset_territory()
+    
 
 
 main()

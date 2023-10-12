@@ -29,3 +29,13 @@ def reset_territory():
     else:
         print('Error:', response.status_code)
     return response.text
+
+def check_exploration():
+    url = f'{base_url}/territory/check-exploration'
+    response = requests.get(url)
+    if response.text == "True":
+        print("True")
+        return True
+    else:
+        print("False")
+        return False
