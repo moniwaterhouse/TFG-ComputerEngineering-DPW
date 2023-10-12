@@ -1,5 +1,5 @@
 import requests
-from config import Config
+from client.config import Config
 
 base_url = Config.BASE_URL
 
@@ -61,6 +61,16 @@ def check_west_neighbor(x_pos, y_pos):
         print('Error:', response.status_code)
     return response.json()[0]
 
+def check_current_type(x_pos, y_pos):
+    url = f'{base_url}/dpw/check-current-type/{x_pos}/{y_pos}'
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        print("Current cell type: ", response.json()[0])
+    else:
+        print('Error:', response.status_code)
+    return response.json()[0]
+
 def check_north_pheromone(x_pos, y_pos):
     url = f'{base_url}/dpw/north-pheromone/{x_pos}/{y_pos}'
     response = requests.get(url)
@@ -97,6 +107,26 @@ def check_west_pheromone(x_pos, y_pos):
 
     if response.status_code == 200:
         print("West pheromone intensity: ", response.json()[0])
+    else:
+        print('Error:', response.status_code)
+    return response.json()[0]
+
+def check_current_pheromone(x_pos, y_pos):
+    url = f'{base_url}/dpw/current-pheromone/{x_pos}/{y_pos}'
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        print("Current pheromone intensity: ", response.json()[0])
+    else:
+        print('Error:', response.status_code)
+    return response.json()[0]
+
+def check_if_visited(x_pos, y_pos):
+    url = f'{base_url}/dpw/check-if-visited/{x_pos}/{y_pos}'
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        print("Current pheromone intensity: ", response.json()[0])
     else:
         print('Error:', response.status_code)
     return response.json()[0]
@@ -145,4 +175,3 @@ def set_west_neighbor(x_pos, y_pos, type):
         print('Error:', response.status_code)
     return response.text
 
-set_west_neighbor(1,3,1)
