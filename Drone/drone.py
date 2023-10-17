@@ -1,8 +1,7 @@
 import random
-import time
 from client.config import Config
 from client.dpw_client import deposit_pheromone, check_east_neighbor, check_north_neighbor, check_south_neighbor, check_west_neighbor, check_north_pheromone, check_south_pheromone, check_east_pheromone, check_west_pheromone
-from cflib.positioning.motion_commander import MotionCommander
+
 class Drone:
 
   def __init__(self, initial_direction, initial_x, initial_y, pheromone_intensity):
@@ -18,9 +17,8 @@ class Drone:
     self.east_pheromone = 0
     self.west_pheromone = 0
     self.pheromone_intensity = pheromone_intensity
-    self.move_distance = Config.SIDE_DISTANCE
   
-  def move(self, mc):
+  def move(self):
     move_options = self.get_move_options()
     sorted_options = sorted(move_options, key=lambda x: x[1])
     print("Sorted options: ", sorted_options)
@@ -48,14 +46,13 @@ class Drone:
       elif sorted_options[0][1] == sorted_options[1][1]:
         move_direction = random.choice([sorted_options[0][0], sorted_options[1][0]])
       else:
-        move_direction = sorted_options[0][0]  
+        move_direction = sorted_options[0][0]
 
     print("Move direction: " + move_direction)
     print("---------------------------------")
-    self.change_cell(move_direction, mc)
-    time.sleep(2.0)
+    self.change_cell(move_direction)
     deposit_pheromone(self.pos_x, self.pos_y, self.pheromone_intensity)
-    return
+    return move_direction
 
   def change_direction(self, direction):
     cardinal_points = ["north", "south", "east", "west"]
@@ -65,19 +62,15 @@ class Drone:
     self.direction = new_direction
     return new_direction
 
-  def change_cell(self, move_direction, mc):
+  def change_cell(self, move_direction):
     if move_direction == "north":
       self.pos_y = self.pos_y - 1
-      mc.forward(self.move_distance)
     elif move_direction == "south":
       self.pos_y = self.pos_y + 1
-      mc.back(self.move_distance)
     elif move_direction == "east":
       self.pos_x = self.pos_x + 1
-      mc.right(self.move_distance)
     elif move_direction == "west":
       self.pos_x = self.pos_x - 1
-      mc.left(self.move_distance)
     return
 
   def get_move_options(self):

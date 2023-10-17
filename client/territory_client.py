@@ -34,8 +34,8 @@ def check_exploration():
     url = f'{base_url}/territory/check-exploration'
     response = requests.get(url)
     if response.text == "True":
-        print("True")
+        print("There are missing cells to explore!")
         return True
     else:
-        print("False")
+        print("All cells in the territory have been explored!")
         return False
