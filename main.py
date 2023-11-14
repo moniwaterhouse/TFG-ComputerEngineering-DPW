@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import filedialog
-import pygame
 from simulation import start_simulation
 
 TERRITORY_PATH = "Territory/territory.txt"

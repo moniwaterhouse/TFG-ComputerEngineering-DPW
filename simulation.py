@@ -1,5 +1,4 @@
 import pygame
-from client.config import Config
 from Territory.territory import Territory
 from Drone.drone import Drone
 from client.dpw_client import check_if_visited, check_current_type, evaporate_pheromones, check_current_pheromone, deposit_pheromone
