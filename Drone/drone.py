@@ -1,7 +1,10 @@
 import random
-from client.config import Config
 from client.dpw_client import deposit_pheromone, check_east_neighbor, check_north_neighbor, check_south_neighbor, check_west_neighbor, check_north_pheromone, check_south_pheromone, check_east_pheromone, check_west_pheromone
 
+''' 
+This class represents the drone and the actions it has to do to perform all the require steps to decide to which cell 
+it should move based in the DPW algorithm.
+'''
 class Drone:
 
   def __init__(self, initial_direction, initial_x, initial_y, pheromone_intensity):
@@ -18,12 +21,17 @@ class Drone:
     self.west_pheromone = 0
     self.pheromone_intensity = pheromone_intensity
   
+  '''
+  This method, gets the move options and sort them according their pheromone intensity. It choses the cell which has 
+  the lowest pheromone intensity, and if there are two or more cells with the same pheromone intensity, it choses one 
+  randomly. 
+  '''
   def move(self):
     move_options = self.get_move_options()
     sorted_options = sorted(move_options, key=lambda x: x[1])
-    print("Sorted options: ", sorted_options)
-    print("Current direction: " + self.direction)
+
     options_number = len(sorted_options)
+
     if options_number == 1:
       move_direction = sorted_options[0][0]
     elif options_number == 2:
@@ -48,12 +56,11 @@ class Drone:
       else:
         move_direction = sorted_options[0][0]
 
-    print("Move direction: " + move_direction)
-    print("---------------------------------")
     self.change_cell(move_direction)
     deposit_pheromone(self.pos_x, self.pos_y, self.pheromone_intensity)
     return move_direction
 
+  '''This method changes the direction of the drone if there is an obstacle in the current direction'''
   def change_direction(self, direction):
     cardinal_points = ["north", "south", "east", "west"]
     cardinal_points.remove(direction)
@@ -62,6 +69,7 @@ class Drone:
     self.direction = new_direction
     return new_direction
 
+  '''This method changes the position of the drone depending on the direction that is received as parameter'''
   def change_cell(self, move_direction):
     if move_direction == "north":
       self.pos_y = self.pos_y - 1
@@ -73,6 +81,11 @@ class Drone:
       self.pos_x = self.pos_x - 1
     return
 
+  ''' 
+  This method checks all neighbors (without considering the direction), to determine wether they are obstacles or free 
+  cells. If a cell is free of obstacles, it is added to the move_options list as a tuple with the form 
+  (direction, pheromone_intensity).
+  '''
   def get_move_options(self):
 
     self.check_neighbors_state()
@@ -89,6 +102,11 @@ class Drone:
   
     return move_options
 
+  ''' 
+  This method checks all neighbors, except the neighbor in the opposite of the predefined direction, to determine wether they are obstacles or free 
+  cells. If a cell is free of obstacles, it is added to the move_options list as a tuple with the form 
+  (direction, pheromone_intensity).
+  '''
   def get_move_options_directional(self):
     self.check_neighbors_state()
     move_options = []
@@ -149,7 +167,9 @@ class Drone:
           self.change_direction("west")
     return move_options
 
-
+  '''
+  This methods gets the type and the pheromone intensity of all adjacent neighbors of the cell where the drone is positioned
+  '''
   def check_neighbors_state(self):
     self.north_value = check_north_neighbor(self.pos_x, self.pos_y)
     self.north_pheromone = check_north_pheromone(self.pos_x, self.pos_y)

@@ -7,12 +7,14 @@ TERRITORY_PATH = "Territory/territory.txt"
 DRONE_COUNT = 1
 PHEROMONE_INTENSITY = 300
 
+''' This method allows the selection of a .txt file with the territory'''
 def select_file():
     global TERRITORY_PATH
     file_path = filedialog.askopenfilename()
     TERRITORY_PATH = file_path
     file_label.config(text=f"Selected file: {TERRITORY_PATH}")
 
+''' This method allows user to enter the number of drones and the pheromone intensity'''
 def set_parameters():
     global DRONE_COUNT
     global PHEROMONE_INTENSITY
@@ -27,8 +29,7 @@ def set_parameters():
     except ValueError:
         print("Please enter a valid integer for the drone count and pheromone intensity.")
 
-    
-
+''' This methos is triggered when the submit button is pressed. It starts the simulation.'''
 def open_pygame_window():
     start_simulation(TERRITORY_PATH, DRONE_COUNT, PHEROMONE_INTENSITY)
 
