@@ -1,3 +1,6 @@
+''' 
+This class represents a cell of the territory. It is used for simulation purposes to draw the cells in the pygame window.
+'''
 class Cell:
 
   def __init__(self, value):
@@ -8,7 +11,3 @@ class Cell:
       self.visited = "F"
     else:
       self.visited = "-"
-  
-  def evaporatePheromone(self):
-    self.pheromoneIntensity = self.pheromoneIntensity - 1
-    return self.pheromoneIntensity
