@@ -10,7 +10,7 @@ This specific branch from the repository, contains the code that simulates the b
 
 ## Start the server
 
-You must clone the [TFG-ComputerEngineering-API](https://github.com/moniwaterhouse/TFG-ComputerEngineering-API) and follow the instructions on its `README.md` file to start the server. This needs to be done prior to run this code since the simulation interacts with the Neo4j database throug that API.
+You must clone the [TFG-ComputerEngineering-API](https://github.com/moniwaterhouse/TFG-ComputerEngineering-API) and follow the instructions on its `README.md` file to start the server. This needs to be done prior to run this code since the simulation interacts with the Neo4j database through that API.
 
 ## Start the simulation
 
