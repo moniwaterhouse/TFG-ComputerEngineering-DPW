@@ -9,4 +9,5 @@ class Config:
 
     PHEROMONE_INTENSITY = 500
     CACHE_PATH = "/Users/moniwaterhouse/TFG-ComputerEngineering-DPW/cache"
-    URI = uri_helper.uri_from_env(default='radio://0/80/2M/E7E7E7E7E7')
+    BASE_URI = 'radio://0/80/2M/'
+    

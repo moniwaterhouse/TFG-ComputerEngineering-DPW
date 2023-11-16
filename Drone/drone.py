@@ -10,7 +10,7 @@ it should move based in the DPW algorithm.
 
 class Drone:
 
-  def __init__(self, initial_direction, initial_x, initial_y, pheromone_intensity):
+  def __init__(self, initial_direction, initial_x, initial_y, pheromone_intensity, move_distance, speed):
     self.direction = initial_direction
     self.pos_x= initial_x
     self.pos_y = initial_y
@@ -23,7 +23,8 @@ class Drone:
     self.east_pheromone = 0
     self.west_pheromone = 0
     self.pheromone_intensity = pheromone_intensity
-    self.move_distance = Config.SIDE_DISTANCE
+    self.move_distance = move_distance
+    self.speed = speed
   
   '''
   This method, gets the move options and sort them according their pheromone intensity. It choses the cell which has 
@@ -80,16 +81,16 @@ class Drone:
   def change_cell(self, move_direction, mc):
     if move_direction == "north":
       self.pos_y = self.pos_y - 1
-      mc.forward(self.move_distance)
+      mc.forward(self.move_distance, velocity=self.speed)
     elif move_direction == "south":
       self.pos_y = self.pos_y + 1
-      mc.back(self.move_distance)
+      mc.back(self.move_distance, velocity=self.speed)
     elif move_direction == "east":
       self.pos_x = self.pos_x + 1
-      mc.right(self.move_distance)
+      mc.right(self.move_distance, velocity=self.speed)
     elif move_direction == "west":
       self.pos_x = self.pos_x - 1
-      mc.left(self.move_distance)
+      mc.left(self.move_distance, velocity=self.speed)
     return
 
   ''' 
