@@ -136,6 +136,9 @@ You will see a window in which you will be able to select the `territory.txt` fi
 
 - Make sure that the `territory.txt` file contains the same amount of rows and columns to make sure that the elements are properly draw in the simulation window.
 - The recommended values for the pheromone intensity are integers between 100 and 500.
-  - One Crazyradio supports up to 15 Crazyflies. To make 2 or more Crazyflies explore the territory, you need will need to run one `run.py` program for each one of the drones. **EACH CRAZYFLIE MUST HAVE A DIFFERENT ADDRESS** This address can be modified in the Crazyflie Client.
+- The values for the speed, height and travel distance are floats.
+- The default value of the speed is: 0.2m/s
+- The default value for height is: 0.3m
+- One Crazyradio supports up to 15 Crazyflies. To make 2 or more Crazyflies explore the territory, you need will need to run one `run.py` program for each one of the drones. **EACH CRAZYFLIE MUST HAVE A DIFFERENT ADDRESS** This address can be modified in the Crazyflie Client.
 
 *** Note that bigger territories will require more computational resources so the simulation may take more time to complete.
